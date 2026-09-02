@@ -16,19 +16,19 @@ A continuación, se presenta la evidencia de la creación y correcto funcionamie
 
 ### 1. Plan de Ejecución de Terraform
 Evidencia del despliegue inicial de la infraestructura de red, cómputo y almacenamiento.
-![Plan de Terraform](capturas/terraform-plan.png)
+![Plan de Terraform](terraform/capturas/terraform-plan.png)
 
 ### 2. Servidor Web (EC2)
 Validación del acceso a través de internet al servidor web Apache configurado.
-![Servidor Web](capturas/web.png)
+![Servidor Web](terraform/capturas/web.png)
 
 ### 3. Almacenamiento CDN (Bucket S3)
 Comprobación del acceso público a los archivos alojados en el bucket S3 para la carga de imágenes.
-![Acceso S3](capturas/s3.png)
+![Acceso S3](terraform/capturas/s3.png)
 
 ### 4. Base de Datos (RDS MySQL)
 Verificación del acceso a la base de datos y la correcta creación de registros utilizando el identificador de la dupla (`flefil-caro`).
-![Conexión RDS](capturas/rds.png)
+![Conexión RDS](terraform/capturas/rds.png)
 
 ---
 
@@ -38,11 +38,11 @@ Para asegurar la persistencia de la información ante una eventual destrucción 
 
 ### 1. Destrucción de la Infraestructura
 Ejecución del comando `terraform destroy`, demostrando el desmantelamiento de los recursos y la creación automática del snapshot final de seguridad.
-![Proceso de Destrucción](capturas/destroy.png)
+![Proceso de Destrucción](terraform/capturas/destroy.png)
 
 ### 2. Restauración de los Datos
 Despliegue de la infraestructura inyectando el snapshot previo. Se comprueba que el registro original de la dupla sobrevive a la destrucción de la infraestructura.
-![Restauración Exitosa](capturas/restore.png)
+![Restauración Exitosa](terraform/capturas/restore.png)
 
 ---
 
@@ -52,8 +52,8 @@ Para garantizar la integridad, consistencia y trabajo colaborativo, el estado de
 
 ### 1. Migración del Estado (Terminal)
 Inicialización del backend y migración exitosa confirmada por la consola.
-![Configuración del Backend](capturas/backend.png)
+![Configuración del Backend](terraform/capturas/backend.png)
 
 ### 2. Persistencia en la Nube (AWS S3)
 Verificación del archivo de estado correctamente registrado y alojado en el bucket S3 de AWS.
-![Estado en AWS S3](capturas/backend-s3.png)
+![Estado en AWS S3](terraform/capturas/backend-s3.png)
