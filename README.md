@@ -16,18 +16,22 @@ A continuación, se presenta la evidencia de la creación y correcto funcionamie
 
 ### 1. Plan de Ejecución de Terraform
 Evidencia del despliegue inicial de la infraestructura de red, cómputo y almacenamiento.
+
 ![Plan de Terraform](terraform/capturas/terraform-plan.png)
 
 ### 2. Servidor Web (EC2)
 Validación del acceso a través de internet al servidor web Apache configurado.
+
 ![Servidor Web](terraform/capturas/web.png)
 
 ### 3. Almacenamiento CDN (Bucket S3)
 Comprobación del acceso público a los archivos alojados en el bucket S3 para la carga de imágenes.
+
 ![Acceso S3](terraform/capturas/s3.png)
 
 ### 4. Base de Datos (RDS MySQL)
 Verificación del acceso a la base de datos y la correcta creación de registros utilizando el identificador de la dupla (`flefil-caro`).
+
 ![Conexión RDS](terraform/capturas/rds.png)
 
 ---
@@ -38,10 +42,12 @@ Para asegurar la persistencia de la información ante una eventual destrucción 
 
 ### 1. Destrucción de la Infraestructura
 Ejecución del comando `terraform destroy`, demostrando el desmantelamiento de los recursos y la creación automática del snapshot final de seguridad.
+
 ![Proceso de Destrucción](terraform/capturas/destroy.png)
 
 ### 2. Restauración de los Datos
 Despliegue de la infraestructura inyectando el snapshot previo. Se comprueba que el registro original de la dupla sobrevive a la destrucción de la infraestructura.
+
 ![Restauración Exitosa](terraform/capturas/restore.png)
 
 ---
