@@ -45,7 +45,7 @@ resource "aws_security_group" "allow_all" {
   }
 }
 
-# S3 Bucket con persistencia (sin ACL/policy por restricciones del Lab)
+# S3 Bucket con persistencia
 resource "aws_s3_bucket" "cdn" {
   bucket = var.bucket_name
 
@@ -71,7 +71,7 @@ resource "aws_db_instance" "mysql" {
   deletion_protection       = var.deletion_protection
 }
 
-# EC2 con despliegue de la app Go desde GitHub
+# EC2 con despliegue corregido de Go
 resource "aws_instance" "web" {
   ami                         = var.ami_id
   instance_type               = "t2.micro"
@@ -81,13 +81,17 @@ resource "aws_instance" "web" {
 
   user_data = <<-EOF
     #!/bin/bash
-    set -euxo pipefail
     exec > >(tee /var/log/user-data.log) 2>&1
+    set -euxo pipefail
 
     export DEBIAN_FRONTEND=noninteractive
+    
+    # Declarar variables de entorno críticas para que Go pueda descargar módulos
+    export GOPATH=/root/go
+    export GOCACHE=/root/.cache/go-build
+
     apt-get update -y
     
-    # Detener Apache si está instalado para que no bloquee el puerto 80
     systemctl stop apache2 || true
     systemctl disable apache2 || true
 
@@ -95,24 +99,31 @@ resource "aws_instance" "web" {
 
     cd /opt
     git clone ${var.app_repo_url} demo-app || true
-    cd demo-app
 
-    # Inicializar módulo Go y descargar dependencias si no existe go.mod
-    if [ ! -f go.mod ]; then
-      go mod init demoapp
-      go mod tidy
-    fi
+    # Buscar dinámicamente la carpeta
+    APP_DIR=$(find /opt/demo-app -name main.go -exec dirname {} \;)
+    cd $APP_DIR
+
+    # Resolver dependencias con el caché configurado
+    rm -f go.mod go.sum
+    go mod init demoapp
+    go get github.com/GeertJohan/go.rice
+    go get github.com/gorilla/mux
+    go get github.com/graarh/golang-socketio
+    go get github.com/graarh/golang-socketio/transport
+    go mod tidy
 
     go build -o /usr/local/bin/webapp . || true
 
-    cat > /etc/systemd/system/webapp.service <<'UNIT'
+    # Crear el servicio
+    cat > /etc/systemd/system/webapp.service <<-UNIT
     [Unit]
     Description=Demo web app personalizada
     After=network.target
 
     [Service]
     ExecStart=/usr/local/bin/webapp
-    WorkingDirectory=/opt/demo-app
+    WorkingDirectory=$APP_DIR
     Restart=always
     User=root
     Environment=PORT=80

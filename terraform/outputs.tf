@@ -11,5 +11,6 @@ output "web_public_ip" {
 }
 
 output "app_url" {
-  value = "http://${aws_instance.web.public_ip}/app"
+  # Quitamos el sufijo /app para que entregue la IP limpia
+  value = "http://${aws_instance.web.public_ip}"
 }
