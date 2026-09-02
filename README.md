@@ -1,6 +1,6 @@
 # Evaluación Parcial 1: Infraestructura como Código I (AUY1103)
 
-**Estudiantes:** Francisco Flefil / Caro (Dupla: `flefil-caro`)
+**Estudiantes:** Francisco Flefil / Javier Caro (Dupla: `flefil-caro`)
 **Asignatura:** Infraestructura como código I
 
 ---
