@@ -58,8 +58,10 @@ Para garantizar la integridad, consistencia y trabajo colaborativo, el estado de
 
 ### 1. Migración del Estado (Terminal)
 Inicialización del backend y migración exitosa confirmada por la consola.
+
 ![Configuración del Backend](terraform/capturas/backend.png)
 
 ### 2. Persistencia en la Nube (AWS S3)
 Verificación del archivo de estado correctamente registrado y alojado en el bucket S3 de AWS.
+
 ![Estado en AWS S3](terraform/capturas/backend-s3.png)
