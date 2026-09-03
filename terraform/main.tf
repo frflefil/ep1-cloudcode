@@ -20,6 +20,16 @@ resource "aws_vpc" "main" {
   enable_dns_hostnames = true
 }
 
+resource "aws_subnet" "public_subnet" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.1.0/24"
+  map_public_ip_on_launch = true # Asigna IP pública automáticamente
+
+  tags = {
+    Name = "terraform-public-subnet"
+  }
+}
+
 resource "aws_security_group" "terraform_sg" {
   name        = "terraform-sg"
   description = "Permitir HTTP y MySQL"
@@ -95,4 +105,16 @@ resource "aws_db_instance" "db" {
   snapshot_identifier  = var.restore ? "flefil-caro-db-snapshot" : null
   publicly_accessible  = true
   vpc_security_group_ids = [aws_security_group.terraform_sg.id]
+}
+
+# 5. Servidor de Aplicaciones (Instancia EC2)
+resource "aws_instance" "app_server" {
+  ami                    = "ami-0e2c8caa4b6378d8c" # Ubuntu 24.04 LTS en us-east-1
+  instance_type          = "t2.micro"
+  subnet_id              = aws_subnet.public_subnet.id
+  vpc_security_group_ids = [aws_security_group.terraform_sg.id]
+
+  tags = {
+    Name = "flefil-caro-app-server"
+  }
 }
